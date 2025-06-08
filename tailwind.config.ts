@@ -75,6 +75,7 @@ const config: Config = {
       fontFamily: {
         sans: ['Geist', 'var(--font-sans)', ...fontFamily.sans],
         heading: ['Geist', 'var(--font-heading)', ...fontFamily.sans],
+        geist: ['Geist', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
