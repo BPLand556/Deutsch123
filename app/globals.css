@@ -1,7 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Regular.woff2') format('woff2');
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -70,6 +75,11 @@
   * {
     @apply border-border;
   }
+  
+  html {
+    font-family: 'Geist', sans-serif;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
