@@ -1,17 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter as FontSans } from 'next/font/google'
-import { Geist as FontHeading } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import './globals.css'
 
-const fontSans = FontSans({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
-})
-
-const fontHeading = FontHeading({
-  subsets: ['latin'],
-  variable: '--font-heading',
 })
 
 export const metadata: Metadata = {
@@ -74,8 +68,7 @@ export default function RootLayout({
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
-          fontSans.variable,
-          fontHeading.variable
+          inter.variable
         )}
       >
         {children}
