@@ -147,4 +147,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Thanks to all contributors and supporters
 - Inspired by modern language learning research
 - Built with the latest web technologies
-- Designed for optimal learning outcomes 
+- Designed for optimal learning outcomes # Deutsch123
