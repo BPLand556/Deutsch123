@@ -13,6 +13,7 @@ export default function GeistExample() {
           <Card>
             <Text h4>Virtual Immersion</Text>
             <Text p>Experience German language learning through interactive scenarios.</Text>
+            {/* @ts-expect-error Geist UI Button type issue */}
             <Button type="success">
               Start Learning
             </Button>
@@ -23,6 +24,7 @@ export default function GeistExample() {
           <Card>
             <Text h4>AI Conversations</Text>
             <Text p>Practice with AI-powered conversation partners.</Text>
+            {/* @ts-expect-error Geist UI Button type issue */}
             <Button type="secondary">
               Chat Now
             </Button>

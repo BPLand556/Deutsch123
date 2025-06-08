@@ -11,11 +11,10 @@ interface ImmersionExperienceProps {
 }
 
 export default function ImmersionExperience({ scenario, onComplete, onExit }: ImmersionExperienceProps) {
-  const [currentStep, setCurrentStep] = useState(0)
   const [messages, setMessages] = useState<ConversationMessage[]>([])
   const [userInput, setUserInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
-  const [completedObjectives, setCompletedObjectives] = useState<string[]>([])
+  const [completedObjectives] = useState<string[]>([])
   const [currentCharacter, setCurrentCharacter] = useState<Character | null>(null)
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
 
     // Simulate AI response
     setTimeout(() => {
-      const aiResponse = generateAIResponse(userInput, currentCharacter)
+      const aiResponse = generateAIResponse()
       const aiMessage: ConversationMessage = {
         id: (Date.now() + 1).toString(),
         sender: 'ai',
@@ -61,7 +60,7 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
     }, 1500)
   }
 
-  const generateAIResponse = (userInput: string, character: Character | null): string => {
+  const generateAIResponse = (): string => {
     const responses = [
       "Das ist sehr gut! Können Sie das noch einmal sagen?",
       "Verstehe! Möchten Sie mehr über das lernen?",
@@ -70,10 +69,6 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
       "Gut gemacht! Haben Sie noch Fragen?"
     ]
     return responses[Math.floor(Math.random() * responses.length)]
-  }
-
-  const completeObjective = (objectiveId: string) => {
-    setCompletedObjectives(prev => [...prev, objectiveId])
   }
 
   const getProgressPercentage = () => {
