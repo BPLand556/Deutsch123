@@ -13,6 +13,12 @@ export default function Home() {
           <nav className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
             <div className="flex items-center space-x-2">
               <Link
+                href="/immersion"
+                className="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              >
+                Virtual Immersion
+              </Link>
+              <Link
                 href="/login"
                 className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               >
@@ -35,10 +41,10 @@ export default function Home() {
             </p>
             <div className="space-x-4">
               <Link
-                href="/signup"
+                href="/immersion"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               >
-                Start Learning Free
+                Try Virtual Immersion
               </Link>
               <Link
                 href="/about"
