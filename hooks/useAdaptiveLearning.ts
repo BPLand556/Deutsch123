@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 interface LearningMetrics {
   vocabularyRetention: number; // 0-1
@@ -278,7 +278,6 @@ export const useAdaptiveLearning = (options: UseAdaptiveLearningOptions = {}) =>
       }
 
       // Analyze and update
-      const performanceScore = calculatePerformanceScore(updatedMetrics);
       const trend = analyzeProgressTrend(updatedMetrics);
       const newDifficulty = generateDifficultyRecommendations(updatedMetrics, prevState.currentDifficulty);
       const recommendations = generateContentRecommendations(prevState.userProfile, updatedMetrics);
@@ -313,9 +312,8 @@ export const useAdaptiveLearning = (options: UseAdaptiveLearningOptions = {}) =>
     type: 'vocabulary' | 'pronunciation' | 'conversation' | 'cultural';
     success: boolean;
     responseTime: number;
-    difficulty: number;
   }) => {
-    const { type, success, responseTime, difficulty } = interaction;
+    const { type, success, responseTime } = interaction;
 
     setState(prevState => {
       const newMetrics = { ...prevState.currentMetrics };

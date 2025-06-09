@@ -17,10 +17,8 @@ export default function Phase3Page() {
   const {
     userProfile,
     currentMetrics,
-    currentDifficulty,
     recordInteraction,
-    startSession,
-    endSession,
+    startSession
   } = useAdaptiveLearning();
 
   const AI_PERSONALITIES = {
@@ -181,9 +179,8 @@ export default function Phase3Page() {
       type: 'conversation',
       success: true,
       responseTime: 2000,
-      difficulty: currentDifficulty.vocabularyComplexity,
     });
-  }, [recordInteraction, currentDifficulty]);
+  }, [recordInteraction]);
 
   const handleLearningInsight = useCallback((insight: string) => {
     setConversationInsights(prev => [...prev, insight]);
@@ -199,13 +196,8 @@ export default function Phase3Page() {
       type: 'cultural',
       success: true,
       responseTime: 3000,
-      difficulty: currentDifficulty.culturalContext,
     });
-  }, [recordInteraction, currentDifficulty]);
-
-  const handleAchievementUnlocked = useCallback((achievement: any) => {
-    console.log('Achievement unlocked:', achievement);
-  }, []);
+  }, [recordInteraction]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
@@ -362,14 +354,12 @@ export default function Phase3Page() {
                 {/* Cultural Simulation */}
                 <CulturalSimulation
                   event={CULTURAL_EVENTS[selectedCulturalEvent as keyof typeof CULTURAL_EVENTS]}
-                  userLevel={userProfile.currentLevel}
                   onEventComplete={(eventId, performance) => {
                     console.log(`Cultural event ${eventId} completed with ${performance * 100}% performance`);
                     recordInteraction({
                       type: 'cultural',
                       success: performance > 0.7,
                       responseTime: 3000,
-                      difficulty: currentDifficulty.culturalContext,
                     });
                   }}
                   onCulturalInsight={handleCulturalInsight}
@@ -407,7 +397,6 @@ export default function Phase3Page() {
                 <SocialLearningHub
                   currentUser={MOCK_USER}
                   onScenarioJoin={handleScenarioJoin}
-                  onAchievementUnlocked={handleAchievementUnlocked}
                   className="w-full"
                 />
               </div>

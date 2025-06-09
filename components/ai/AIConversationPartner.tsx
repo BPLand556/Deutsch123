@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TextToSpeech } from '@/components/voice/TextToSpeech';
 import { VoiceInput } from '@/components/voice/VoiceInput';
 
 interface ConversationContext {
@@ -119,7 +118,6 @@ export const AIConversationPartner: React.FC<AIConversationPartnerProps> = ({
   className = '',
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isListening, setIsListening] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const [conversationContext, setConversationContext] = useState<ConversationContext>({
     topic,
@@ -129,7 +127,6 @@ export const AIConversationPartner: React.FC<AIConversationPartnerProps> = ({
     culturalContext: '',
     regionalVariation: personality.region,
   });
-  const [suggestedTopics, setSuggestedTopics] = useState<string[]>([]);
   const [conversationScore, setConversationScore] = useState<number>(0);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -148,13 +145,6 @@ export const AIConversationPartner: React.FC<AIConversationPartnerProps> = ({
     
     // Simulate AI processing time
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-
-    const context = {
-      ...conversationContext,
-      userMessage,
-      personality,
-      userLevel,
-    };
 
     // Generate contextual response
     let response = '';
@@ -207,7 +197,7 @@ export const AIConversationPartner: React.FC<AIConversationPartnerProps> = ({
 
     setIsThinking(false);
     return response;
-  }, [conversationContext, personality, userLevel, topic]);
+  }, [personality, userLevel, topic]);
 
   const handleUserMessage = useCallback(async (message: string) => {
     const userMessage: Message = {

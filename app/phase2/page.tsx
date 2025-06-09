@@ -12,7 +12,7 @@ import { TranslationReveal } from '@/components/translation/TranslationReveal';
 
 export default function Phase2Page() {
   const [selectedFeature, setSelectedFeature] = useState<string>('scenarios');
-  const [currentScenario, setCurrentScenario] = useState<string>('coffee-shop-basic');
+  const [currentScenario] = useState<string>('coffee-shop-basic');
   const [selectedCharacter, setSelectedCharacter] = useState<string>('anna-barista');
   const [showLearningDashboard, setShowLearningDashboard] = useState<boolean>(false);
 
@@ -25,8 +25,7 @@ export default function Phase2Page() {
     nextSuggestedScenario,
     learningInsights,
     recordInteraction,
-    startSession,
-    endSession,
+    startSession
   } = useAdaptiveLearning({
     onDifficultyChange: (difficulty) => {
       console.log('Difficulty adjusted:', difficulty);
@@ -120,7 +119,6 @@ export default function Phase2Page() {
       type: 'conversation',
       success: performance > 0.7,
       responseTime: 3000,
-      difficulty: currentDifficulty.vocabularyComplexity,
     });
   };
 
@@ -352,7 +350,6 @@ export default function Phase2Page() {
                           type: 'cultural',
                           success: true,
                           responseTime: 2000,
-                          difficulty: currentDifficulty.culturalContext,
                         });
                       }}
                     />
@@ -373,7 +370,6 @@ export default function Phase2Page() {
                             type: 'pronunciation',
                             success: transcript.length > 0,
                             responseTime: 2000,
-                            difficulty: currentDifficulty.speechSpeed,
                           });
                         }}
                         className="w-full"

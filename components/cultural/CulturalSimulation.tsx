@@ -31,154 +31,18 @@ interface CulturalSimulationProps {
   className?: string;
 }
 
-const CULTURAL_EVENTS: Record<string, CulturalEvent> = {
-  'oktoberfest-munich': {
-    id: 'oktoberfest-munich',
-    title: 'Oktoberfest in Munich',
-    description: 'Experience the world\'s largest beer festival and cultural celebration.',
-    historicalPeriod: 'Modern (1810 - Present)',
-    location: 'Munich, Bavaria',
-    participants: ['Local Bavarians', 'International tourists', 'Beer tent staff', 'Traditional musicians'],
-    culturalContext: 'Oktoberfest celebrates Bavarian culture, tradition, and community. It began as a royal wedding celebration and has grown into a global phenomenon.',
-    vocabulary: ['Bier', 'Wiesn', 'Dirndl', 'Lederhosen', 'Prost', 'Gemütlichkeit', 'Bierzelt', 'Maß'],
-    dialogue: [
-      {
-        role: 'Bavarian Local',
-        text: 'Servus! Willkommen auf der Wiesn! Möchten Sie ein Maß Bier?',
-        translation: 'Hello! Welcome to Oktoberfest! Would you like a liter of beer?',
-        culturalNote: 'Servus is a traditional Bavarian greeting, and "Wiesn" is the local name for Oktoberfest.',
-      },
-      {
-        role: 'User',
-        text: 'Ja, gerne! Ein Maß bitte.',
-        translation: 'Yes, please! A liter please.',
-        culturalNote: 'Maß refers to the traditional 1-liter beer mug used at Oktoberfest.',
-      },
-      {
-        role: 'Bavarian Local',
-        text: 'Prost! Zum Wohl!',
-        translation: 'Cheers! To your health!',
-        culturalNote: 'Prost is the traditional German toast, and "Zum Wohl" means "to your health".',
-      },
-    ],
-    outcomes: [
-      'Learn about Bavarian traditions and customs',
-      'Understand the importance of community celebrations',
-      'Practice traditional German toasts and greetings',
-      'Experience authentic cultural interaction',
-    ],
-    historicalSignificance: 'Oktoberfest represents the preservation of Bavarian culture and the importance of tradition in modern German society.',
-  },
-  'berlin-wall-fall': {
-    id: 'berlin-wall-fall',
-    title: 'The Fall of the Berlin Wall',
-    description: 'Witness the historic moment when East and West Germany were reunited.',
-    historicalPeriod: 'Cold War (1989)',
-    location: 'Berlin, Germany',
-    participants: ['East German citizens', 'West German citizens', 'International journalists', 'Political leaders'],
-    culturalContext: 'The fall of the Berlin Wall symbolized the end of the Cold War and the reunification of Germany, marking a pivotal moment in European history.',
-    vocabulary: ['Mauer', 'Wiedervereinigung', 'Freiheit', 'Demokratie', 'Grenze', 'Ost', 'West', 'Einheit'],
-    dialogue: [
-      {
-        role: 'East German Citizen',
-        text: 'Die Mauer ist gefallen! Wir sind frei!',
-        translation: 'The wall has fallen! We are free!',
-        culturalNote: 'This moment represented the end of decades of separation and oppression.',
-      },
-      {
-        role: 'West German Citizen',
-        text: 'Willkommen! Endlich sind wir wieder vereint!',
-        translation: 'Welcome! Finally we are reunited!',
-        culturalNote: 'The reunification brought together families and friends separated for decades.',
-      },
-    ],
-    outcomes: [
-      'Understand the historical significance of German reunification',
-      'Learn about the impact of political change on ordinary citizens',
-      'Practice vocabulary related to freedom and unity',
-      'Experience the emotional weight of historical events',
-    ],
-    historicalSignificance: 'The fall of the Berlin Wall marked the end of the Cold War and the beginning of a new era in European history.',
-  },
-  'weimar-republic': {
-    id: 'weimar-republic',
-    title: 'Weimar Republic Cultural Scene',
-    description: 'Experience the vibrant arts and culture of 1920s Germany.',
-    historicalPeriod: 'Weimar Republic (1919-1933)',
-    location: 'Berlin, Weimar',
-    participants: ['Artists', 'Writers', 'Musicians', 'Intellectuals', 'Students'],
-    culturalContext: 'The Weimar Republic was a period of intense cultural creativity and social change, despite political instability.',
-    vocabulary: ['Kunst', 'Literatur', 'Musik', 'Theater', 'Avantgarde', 'Expressionismus', 'Demokratie', 'Freiheit'],
-    dialogue: [
-      {
-        role: 'Artist',
-        text: 'Die Kunst muss die Gesellschaft widerspiegeln und verändern.',
-        translation: 'Art must reflect and change society.',
-        culturalNote: 'Weimar artists believed in the power of art to transform society.',
-      },
-      {
-        role: 'Student',
-        text: 'Wir leben in einer Zeit großer Veränderungen und Möglichkeiten.',
-        translation: 'We live in a time of great change and possibilities.',
-        culturalNote: 'The Weimar period was marked by optimism and experimentation.',
-      },
-    ],
-    outcomes: [
-      'Learn about German cultural and artistic movements',
-      'Understand the relationship between art and society',
-      'Practice vocabulary related to culture and creativity',
-      'Experience the intellectual atmosphere of the time',
-    ],
-    historicalSignificance: 'The Weimar Republic represents a golden age of German culture and intellectual achievement.',
-  },
-  'medieval-market': {
-    id: 'medieval-market',
-    title: 'Medieval German Market',
-    description: 'Experience daily life in a medieval German market town.',
-    historicalPeriod: 'Medieval (12th-15th Century)',
-    location: 'Various German cities',
-    participants: ['Merchants', 'Craftsmen', 'Nobles', 'Peasants', 'Monks'],
-    culturalContext: 'Medieval markets were centers of trade, culture, and social interaction, playing a crucial role in the development of German cities.',
-    vocabulary: ['Markt', 'Händler', 'Handwerk', 'Gilde', 'Münze', 'Ware', 'Preis', 'Handel'],
-    dialogue: [
-      {
-        role: 'Merchant',
-        text: 'Guten Tag, edler Herr! Welche Waren suchen Sie?',
-        translation: 'Good day, noble sir! What goods are you looking for?',
-        culturalNote: 'Medieval society was highly hierarchical, reflected in language and customs.',
-      },
-      {
-        role: 'Customer',
-        text: 'Ich suche feine Stoffe aus dem Orient.',
-        translation: 'I am looking for fine fabrics from the Orient.',
-        culturalNote: 'Medieval trade routes brought exotic goods from distant lands.',
-      },
-    ],
-    outcomes: [
-      'Learn about medieval German society and economy',
-      'Understand the importance of trade in historical development',
-      'Practice vocabulary related to commerce and daily life',
-      'Experience the social structure of medieval times',
-    ],
-    historicalSignificance: 'Medieval markets were the foundation of modern European commerce and urban development.',
-  },
-};
-
-export const CulturalSimulation: React.FC<CulturalSimulationProps> = ({
+export const CulturalSimulation: React.FC<Omit<CulturalSimulationProps, 'userLevel'>> = ({
   event,
-  userLevel,
   onEventComplete,
   onCulturalInsight,
   className = '',
 }) => {
   const [currentStep, setCurrentStep] = useState<number>(0);
-  const [userChoices, setUserChoices] = useState<string[]>([]);
   const [simulationProgress, setSimulationProgress] = useState<number>(0);
   const [showHistoricalContext, setShowHistoricalContext] = useState<boolean>(false);
   const [currentDialogue, setCurrentDialogue] = useState<number>(0);
 
-  const handleChoice = useCallback((choice: string) => {
-    setUserChoices(prev => [...prev, choice]);
+  const handleChoice = useCallback(() => {
     setCurrentStep(prev => prev + 1);
     setSimulationProgress(prev => Math.min(100, prev + 25));
 
@@ -324,7 +188,7 @@ export const CulturalSimulation: React.FC<CulturalSimulationProps> = ({
                   {['Polite agreement', 'Ask for clarification', 'Express enthusiasm', 'Show cultural respect'].map((choice, index) => (
                     <button
                       key={index}
-                      onClick={() => handleChoice(choice)}
+                      onClick={() => handleChoice()}
                       className="w-full p-3 text-left bg-white border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
                     >
                       <span className="font-medium text-gray-900">{choice}</span>

@@ -44,10 +44,9 @@ interface MultiplayerScenario {
   participants: User[];
 }
 
-interface SocialLearningHubProps {
+export interface SocialLearningHubProps {
   currentUser: User;
   onScenarioJoin?: (scenario: MultiplayerScenario) => void;
-  onAchievementUnlocked?: (achievement: Achievement) => void;
   className?: string;
 }
 
@@ -177,13 +176,12 @@ const MOCK_USERS: User[] = [
 export const SocialLearningHub: React.FC<SocialLearningHubProps> = ({
   currentUser,
   onScenarioJoin,
-  onAchievementUnlocked,
   className = '',
 }) => {
   const [activeTab, setActiveTab] = useState<'leaderboard' | 'scenarios' | 'achievements' | 'community'>('leaderboard');
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [scenarios, setScenarios] = useState<MultiplayerScenario[]>(MULTIPLAYER_SCENARIOS);
-  const [showAchievement, setShowAchievement] = useState<Achievement | null>(null);
+  const [showAchievement] = useState<Achievement | null>(null);
 
   // Generate leaderboard
   useEffect(() => {
@@ -207,13 +205,6 @@ export const SocialLearningHub: React.FC<SocialLearningHubProps> = ({
     setScenarios(prev => prev.map(s => s.id === scenario.id ? updatedScenario : s));
     onScenarioJoin?.(updatedScenario);
   }, [currentUser, onScenarioJoin]);
-
-  const handleAchievementUnlock = useCallback((achievement: Achievement) => {
-    setShowAchievement(achievement);
-    onAchievementUnlocked?.(achievement);
-    
-    setTimeout(() => setShowAchievement(null), 3000);
-  }, [onAchievementUnlocked]);
 
   const getRarityColor = (rarity: string) => {
     const colors = {
@@ -281,7 +272,7 @@ export const SocialLearningHub: React.FC<SocialLearningHubProps> = ({
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Global Leaderboard</h3>
               
-              {leaderboard.map((entry, index) => (
+              {leaderboard.map((entry) => (
                 <div
                   key={entry.user.id}
                   className={`flex items-center p-4 rounded-lg border-2 ${

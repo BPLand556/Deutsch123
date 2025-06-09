@@ -23,77 +23,13 @@ interface CharacterEmotion {
   duration: number; // milliseconds
 }
 
-interface AdvancedCharacterProps {
+export interface AdvancedCharacterProps {
   character: CharacterPersonality;
   currentEmotion?: CharacterEmotion;
   isSpeaking?: boolean;
-  onCharacterInteraction?: (interaction: string) => void;
   className?: string;
   showControls?: boolean;
 }
-
-const CHARACTER_DATABASE: Record<string, CharacterPersonality> = {
-  'anna-barista': {
-    name: 'Anna',
-    age: 24,
-    region: 'Berlin',
-    profession: 'Barista',
-    personality: 'friendly',
-    speakingStyle: 'normal',
-    formality: 'mixed',
-    interests: ['coffee', 'art', 'cycling', 'Berlin culture'],
-    background: 'Anna grew up in Kreuzberg and loves the diverse, creative atmosphere of Berlin. She\'s passionate about coffee and enjoys meeting people from around the world.',
-    voiceId: 'de-DE-Wavenet-A',
-  },
-  'klaus-professor': {
-    name: 'Prof. Dr. Klaus Weber',
-    age: 58,
-    region: 'Munich',
-    profession: 'University Professor',
-    personality: 'formal',
-    speakingStyle: 'slow',
-    formality: 'formal',
-    interests: ['classical music', 'literature', 'hiking', 'wine'],
-    background: 'Professor Weber teaches German literature at LMU Munich. He values precision and traditional academic standards.',
-    voiceId: 'de-DE-Wavenet-D',
-  },
-  'sophie-student': {
-    name: 'Sophie',
-    age: 20,
-    region: 'Hamburg',
-    profession: 'University Student',
-    personality: 'enthusiastic',
-    speakingStyle: 'fast',
-    formality: 'informal',
-    interests: ['sustainability', 'travel', 'photography', 'indie music'],
-    background: 'Sophie is studying environmental science and is passionate about climate change. She loves exploring new places and meeting international students.',
-    voiceId: 'de-DE-Wavenet-C',
-  },
-  'hans-businessman': {
-    name: 'Hans Müller',
-    age: 42,
-    region: 'Frankfurt',
-    profession: 'Business Consultant',
-    personality: 'direct',
-    speakingStyle: 'normal',
-    formality: 'formal',
-    interests: ['golf', 'fine dining', 'classical cars', 'business networking'],
-    background: 'Hans works in international business and values efficiency and direct communication. He\'s well-traveled and understands cultural differences.',
-    voiceId: 'de-DE-Wavenet-B',
-  },
-  'lisa-artist': {
-    name: 'Lisa',
-    age: 29,
-    region: 'Cologne',
-    profession: 'Artist',
-    personality: 'casual',
-    speakingStyle: 'normal',
-    formality: 'informal',
-    interests: ['contemporary art', 'jazz', 'street food', 'alternative culture'],
-    background: 'Lisa is a contemporary artist who loves the creative scene in Cologne. She\'s open-minded and enjoys discussing art and culture.',
-    voiceId: 'de-AT-Wavenet-A',
-  },
-};
 
 const EMOTION_ANIMATIONS = {
   happy: {
@@ -148,13 +84,12 @@ export const AdvancedCharacter: React.FC<AdvancedCharacterProps> = ({
   character,
   currentEmotion = { type: 'neutral', intensity: 0.5, duration: 2000 },
   isSpeaking = false,
-  onCharacterInteraction,
   className = '',
   showControls = false,
 }) => {
   const [displayedEmotion, setDisplayedEmotion] = useState<CharacterEmotion>(currentEmotion);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [currentDialogue, setCurrentDialogue] = useState<string>('');
+  const [currentDialogue] = useState<string>('');
   const [showPersonality, setShowPersonality] = useState(false);
   const emotionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -175,42 +110,37 @@ export const AdvancedCharacter: React.FC<AdvancedCharacterProps> = ({
     }, newEmotion.duration);
   }, []);
 
-  const generateResponse = useCallback((userInput: string) => {
+  const generateResponse = useCallback(() => {
     // Simple response generation based on character personality
     const responses = {
       'anna-barista': [
-        'Guten Morgen! Wie kann ich Ihnen heute helfen?',
-        'Ah, das ist interessant! Möchten Sie etwas über Berlin erfahren?',
-        'Kaffee ist wirklich eine Kunst, finden Sie nicht?',
+        'Hallo! Wie kann ich Ihnen helfen?',
+        'Möchten Sie einen Kaffee oder Tee?',
+        'Das Wetter in Berlin ist heute wunderbar!'
       ],
       'klaus-professor': [
-        'Guten Tag. Wie kann ich Ihnen behilflich sein?',
-        'Das ist eine sehr interessante Frage. Lassen Sie mich das erklären.',
-        'In der deutschen Literatur gibt es viele faszinierende Aspekte.',
+        'Guten Tag. Haben Sie eine Frage zur deutschen Literatur?',
+        'Die deutsche Sprache ist sehr reich an Geschichte.',
+        'Wissen Sie, wer Goethe war?'
       ],
       'sophie-student': [
-        'Hey! Wie geht\'s? Hast du Fragen über das Studentenleben?',
-        'Das ist super! Ich liebe es, neue Leute kennenzulernen!',
-        'Nachhaltigkeit ist so wichtig, findest du nicht?',
+        'Hi! Ich liebe es, neue Leute kennenzulernen.',
+        'Hast du Lust, über Nachhaltigkeit zu sprechen?',
+        'Hamburg ist eine tolle Stadt für Studenten!'
       ],
       'hans-businessman': [
-        'Guten Tag. Wie kann ich Ihnen helfen?',
-        'Das ist ein wichtiger Punkt. Lassen Sie uns das besprechen.',
-        'In der Geschäftswelt ist Effizienz entscheidend.',
+        'Guten Tag. Wie kann ich Ihnen geschäftlich weiterhelfen?',
+        'Frankfurt ist das Finanzzentrum Deutschlands.',
+        'Effizienz ist der Schlüssel zum Erfolg.'
       ],
       'lisa-artist': [
-        'Hi! Wie geht\'s? Bist du auch an Kunst interessiert?',
-        'Das ist echt cool! Kunst ist so vielfältig, oder?',
-        'Köln hat eine fantastische Kunstszene!',
+        'Hallo! Kunst ist meine Leidenschaft.',
+        'Warst du schon mal auf einer Kunstausstellung in Köln?',
+        'Jazzmusik inspiriert mich beim Malen.'
       ],
     };
-
-    const characterResponses = responses[character.name.toLowerCase().replace(' ', '-') as keyof typeof responses] || responses['anna-barista'];
-    const randomResponse = characterResponses[Math.floor(Math.random() * characterResponses.length)];
-    
-    setCurrentDialogue(randomResponse);
-    onCharacterInteraction?.(randomResponse);
-  }, [character, onCharacterInteraction]);
+    return responses[character.name.toLowerCase().replace(' ', '-') as keyof typeof responses]?.[Math.floor(Math.random() * 3)] || 'Hallo!';
+  }, [character.name]);
 
   useEffect(() => {
     if (currentEmotion && currentEmotion !== displayedEmotion) {
@@ -336,16 +266,10 @@ export const AdvancedCharacter: React.FC<AdvancedCharacterProps> = ({
             <h4 className="text-sm font-medium text-gray-700 mb-2">Interactions</h4>
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => generateResponse('greeting')}
+                onClick={() => generateResponse()}
                 className="px-3 py-1 bg-primary-100 hover:bg-primary-200 text-primary-700 rounded-full text-sm transition-colors"
               >
                 Greet
-              </button>
-              <button
-                onClick={() => generateResponse('question')}
-                className="px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-full text-sm transition-colors"
-              >
-                Ask Question
               </button>
               <button
                 onClick={() => setShowPersonality(!showPersonality)}

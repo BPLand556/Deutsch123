@@ -289,7 +289,6 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
   const [scenarioProgress, setScenarioProgress] = useState<number>(0);
   const [showDialogue, setShowDialogue] = useState<boolean>(false);
   const [currentDialogueIndex, setCurrentDialogueIndex] = useState<number>(0);
-  const [userResponses, setUserResponses] = useState<string[]>([]);
 
   const {
     userProfile,
@@ -318,7 +317,6 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
     setScenarioProgress(0);
     setShowDialogue(false);
     setCurrentDialogueIndex(0);
-    setUserResponses([]);
     onScenarioChange?.(scenarioId);
   }, [onScenarioChange]);
 
@@ -336,13 +334,11 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
         type: 'conversation',
         success: performance > 0.7,
         responseTime: 3000,
-        difficulty: currentDifficulty.vocabularyComplexity,
       });
     }
-  }, [currentDialogueIndex, currentScenarioData, scenarioProgress, onScenarioComplete, currentScenario, recordInteraction, currentDifficulty]);
+  }, [currentDialogueIndex, currentScenarioData, scenarioProgress, onScenarioComplete, currentScenario, recordInteraction]);
 
-  const handleUserResponse = useCallback((response: string) => {
-    setUserResponses(prev => [...prev, response]);
+  const handleUserResponse = useCallback(() => {
     handleDialogueProgress();
   }, [handleDialogueProgress]);
 
@@ -358,10 +354,6 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
       advanced: 'bg-red-500',
     };
     return colors[difficulty as keyof typeof colors] || 'bg-gray-500';
-  };
-
-  const getRegionalVariation = (region: string) => {
-    return currentScenarioData.regionalVariations[region] || 'Standard German';
   };
 
   return (
@@ -430,7 +422,6 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
                 type: 'cultural',
                 success: true,
                 responseTime: 2000,
-                difficulty: currentDifficulty.culturalContext,
               });
             }}
           />
@@ -453,10 +444,6 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
             }}
             isSpeaking={showDialogue}
             showControls={true}
-            onCharacterInteraction={(interaction) => {
-              setShowDialogue(true);
-              setTimeout(() => setShowDialogue(false), 3000);
-            }}
           />
         </div>
       </div>
@@ -508,13 +495,13 @@ export const ScenarioManager: React.FC<ScenarioManagerProps> = ({
                 <p className="text-sm font-medium text-gray-700">Your response:</p>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => handleUserResponse('Ja, das ist richtig.')}
+                    onClick={() => handleUserResponse()}
                     className="px-4 py-2 bg-primary-100 hover:bg-primary-200 text-primary-700 rounded-lg text-sm transition-colors"
                   >
                     Ja, das ist richtig.
                   </button>
                   <button
-                    onClick={() => handleUserResponse('Nein, ich verstehe nicht.')}
+                    onClick={() => handleUserResponse()}
                     className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm transition-colors"
                   >
                     Nein, ich verstehe nicht.

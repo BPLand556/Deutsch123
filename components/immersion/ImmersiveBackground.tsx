@@ -218,6 +218,9 @@ export const ImmersiveBackground: React.FC<ImmersiveBackgroundProps> = ({
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const config = SCENARIO_CONFIGS[scenario];
+  if (!config) {
+    return <div className={className}>Invalid scenario</div>;
+  }
   const interactiveElements = config.interactiveElements;
 
   const handleElementClick = useCallback((element: InteractiveElement) => {

@@ -94,7 +94,6 @@ export const useTextToSpeech = (options: UseTTSOptions = {}) => {
   });
 
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Check if speech synthesis is supported
   useEffect(() => {
