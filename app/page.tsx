@@ -203,6 +203,28 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+        {/* Navigation */}
+        <nav className="flex flex-wrap justify-center gap-4 mb-12">
+          <Link
+            href="/features"
+            className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors font-medium"
+          >
+            Phase 1: Core Features
+          </Link>
+          <Link
+            href="/phase2"
+            className="px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors font-medium"
+          >
+            Phase 2: Advanced Immersion
+          </Link>
+          <Link
+            href="/phase3"
+            className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors font-medium"
+          >
+            Phase 3: AI & Social Learning
+          </Link>
+        </nav>
       </main>
       <footer className="border-t py-6 md:py-0">
         <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
