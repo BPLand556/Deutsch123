@@ -520,10 +520,10 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col xl:flex-row gap-6 min-h-screen">
           {/* Main Conversation Area */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-lg p-6 h-96 flex flex-col">
+          <div className="flex-1 flex flex-col min-w-0">
+            <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col flex-1 min-h-0">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                   👤
@@ -533,9 +533,8 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                   <p className="text-sm text-gray-600">{currentCharacter?.role}</p>
                 </div>
               </div>
-
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+              <div className="flex-1 overflow-y-auto mb-4 space-y-4 min-h-0">
                 <AnimatePresence>
                   {messages.map((message) => (
                     <motion.div
@@ -573,10 +572,8 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                   )}
                 </AnimatePresence>
               </div>
-
               {/* Voice Conversation Interface */}
               <div className="space-y-4">
-                {/* Voice Conversation Component */}
                 <VoiceConversation
                   onUserInput={handleVoiceInput}
                   characterResponse={characterResponse}
@@ -591,8 +588,6 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                   showTranscript={true}
                   onError={(error) => console.error('Voice error:', error)}
                 />
-
-                {/* Text Input for Text Mode */}
                 {conversationMode === 'text' && (
                   <div className="flex gap-2">
                     <input
@@ -613,8 +608,6 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                     </button>
                   </div>
                 )}
-
-                {/* Pronunciation Assessment */}
                 {messages.length > 0 && messages[messages.length - 1]?.sender === 'user' && (
                   <PronunciationAssessment
                     userInput={messages[messages.length - 1]?.content || ''}
@@ -625,26 +618,31 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
               </div>
             </div>
           </div>
-
           {/* Sidebar */}
-          <div className="space-y-6">
+          <aside className="w-full xl:w-[370px] flex-shrink-0 flex flex-col gap-6 min-w-0 xl:max-h-[calc(100vh-4rem)] xl:overflow-y-auto">
+            <div className="bg-white rounded-lg shadow-lg p-4 sticky top-0 z-10">
+              <VoiceModeSelector
+                currentMode={conversationMode}
+                onModeChange={setConversationMode}
+                className="mb-0"
+              />
+            </div>
             {/* Character Voice Card */}
             {(isBerlinCoffeeShop || isFrankfurtBusiness || isHamburgSupermarket || isCologneChristmas || isBerlinArtGallery || isMunichBeerGarden) && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Character Voice</h3>
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <h3 className="text-lg font-semibold mb-3">Character Voice</h3>
                 <CharacterVoice
                   character={getCurrentCharacterVoice()}
                   text={characterResponse || 'Hallo! Wie kann ich Ihnen helfen?'}
                   autoPlay={false}
-                  className="mb-4"
+                  className="mb-0"
                 />
               </div>
             )}
-
             {/* Character Card */}
             {(isBerlinCoffeeShop || isFrankfurtBusiness || isHamburgSupermarket || isCologneChristmas || isBerlinArtGallery || isMunichBeerGarden) && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <h3 className="text-lg font-semibold mb-3">
                   {isBerlinCoffeeShop ? 'Anna - Barista' :
                    isFrankfurtBusiness ? 'Frau Weber - Manager' :
                    isHamburgSupermarket ? 'Klaus - Verkäufer' :
@@ -654,12 +652,12 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                    'Character'}
                 </h3>
                 <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-3 ${
+                  <div className={`w-16 h-16 mx-auto rounded-full flex items-center justify-center text-2xl mb-2 ${
                     'bg-gray-100'
                   }`}>
                     {''}
                   </div>
-                  <h4 className="font-medium text-gray-900">
+                  <h4 className="font-medium text-gray-900 text-sm">
                     {isBerlinCoffeeShop ? 'Anna' :
                      isFrankfurtBusiness ? 'Frau Weber' :
                      isHamburgSupermarket ? 'Klaus' :
@@ -668,7 +666,7 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                      isMunichBeerGarden ? 'Hans' :
                      'Character'}
                   </h4>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-xs text-gray-600">
                     {isBerlinCoffeeShop ? 'Barista aus Berlin' :
                      isFrankfurtBusiness ? 'Manager aus Frankfurt' :
                      isHamburgSupermarket ? 'Verkäufer aus Hamburg' :
@@ -677,28 +675,18 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                      isMunichBeerGarden ? 'Wirt aus München' :
                      'Character'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-2">
-                    {isBerlinCoffeeShop ? 'Kreativ, freundlich, kaffeebegeistert' :
-                     isFrankfurtBusiness ? 'Professionell, direkt, effizient' :
-                     isHamburgSupermarket ? 'Hilfsbereit, kenntnisreich, freundlich' :
-                     isCologneChristmas ? 'Festlich, warm, traditionell' :
-                     isBerlinArtGallery ? 'Kreativ, leidenschaftlich, kunstbegeistert' :
-                     isMunichBeerGarden ? 'Traditionell, gastfreundlich, bayerisch' :
-                     'Character personality'}
-                  </p>
                 </div>
               </div>
             )}
-
             {/* Voice Settings */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold mb-4">Voice Settings</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <h3 className="text-lg font-semibold mb-3">Voice Settings</h3>
+              <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-700">Voice Mode</span>
                   <button
                     onClick={() => setVoiceEnabled(!voiceEnabled)}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                       voiceEnabled 
                         ? 'bg-green-100 text-green-700' 
                         : 'bg-gray-100 text-gray-700'
@@ -717,94 +705,81 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                 </div>
               </div>
             </div>
-
-            {/* Voice Mode Selector */}
-            <VoiceModeSelector
-              currentMode={conversationMode}
-              onModeChange={setConversationMode}
-              className="mb-6"
-            />
-
             {/* Objectives */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold mb-4">Learning Objectives</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <h3 className="text-lg font-semibold mb-3">Learning Objectives</h3>
+              <div className="space-y-2">
                 {scenario.objectives.map((objective) => (
-                  <div key={objective.id} className="flex items-center gap-3">
-                    <div className={`w-4 h-4 rounded-full border-2 ${
+                  <div key={objective.id} className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full border-2 flex-shrink-0 ${
                       completedObjectives.includes(objective.id)
                         ? 'bg-green-500 border-green-500'
                         : 'border-gray-300'
                     }`} />
-                    <div>
-                      <h4 className="font-medium text-sm">{objective.title}</h4>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-medium text-xs">{objective.title}</h4>
                       <p className="text-xs text-gray-600">{objective.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-
             {/* Interactive Elements Progress */}
             {(isBerlinCoffeeShop || isFrankfurtBusiness || isHamburgSupermarket || isCologneChristmas || isBerlinArtGallery || isMunichBeerGarden) && (
-              <div className="bg-white rounded-lg shadow-lg p-6">
-                <h3 className="text-lg font-semibold mb-4">Entdeckte Elemente</h3>
-                <div className="space-y-2">
+              <div className="bg-white rounded-lg shadow-lg p-4">
+                <h3 className="text-lg font-semibold mb-3">Entdeckte Elemente</h3>
+                <div className="space-y-1">
                   {getCurrentElements().map(element => (
-                    <div key={element.id} className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${
+                    <div key={element.id} className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full flex-shrink-0 ${
                         interactiveElements.includes(element.id) ? 'bg-green-500' : 'bg-gray-300'
                       }`} />
-                      <span className="text-sm text-gray-700">{element.name}</span>
+                      <span className="text-xs text-gray-700">{element.name}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-
             {/* Vocabulary Helper */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold mb-4">Helpful Phrases</h3>
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <h3 className="text-lg font-semibold mb-3">Helpful Phrases</h3>
               <div className="space-y-2">
-                <div className="text-sm">
+                <div className="text-xs">
                   <strong>Greetings:</strong>
                   <div className="text-gray-600">Hallo, Guten Tag, Wie geht es Ihnen?</div>
                 </div>
-                <div className="text-sm">
+                <div className="text-xs">
                   <strong>Questions:</strong>
                   <div className="text-gray-600">Was kostet das? Wo ist...? Können Sie mir helfen?</div>
                 </div>
-                <div className="text-sm">
+                <div className="text-xs">
                   <strong>Responses:</strong>
                   <div className="text-gray-600">Ja, Nein, Danke, Bitte, Entschuldigung</div>
                 </div>
               </div>
             </div>
-
             {/* Cultural Notes */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold mb-4">Cultural Tips</h3>
-              <div className="space-y-2 text-sm text-gray-600">
+            <div className="bg-white rounded-lg shadow-lg p-4">
+              <h3 className="text-lg font-semibold mb-3">Cultural Tips</h3>
+              <div className="space-y-1 text-xs text-gray-600">
                 <p>• Germans appreciate direct communication</p>
                 <p>• Use formal "Sie" with strangers</p>
                 <p>• Punctuality is very important</p>
                 <p>• Eye contact shows respect</p>
               </div>
             </div>
-          </div>
+          </aside>
         </div>
-
-        {/* Action Buttons */}
-        <div className="mt-8 flex justify-center gap-4">
+        {/* Sticky Action Buttons */}
+        <div className="sticky bottom-0 left-0 w-full bg-white border-t z-30 flex justify-center gap-4 py-4 mt-8">
           <button
             onClick={() => {
-              // Complete the experience
               onComplete({
                 scenarioId: scenario.id,
                 completedObjectives,
                 messages,
                 interactiveElements,
-                duration: 15 // This would be calculated based on actual time spent
+                duration: 15
               })
             }}
             className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700"

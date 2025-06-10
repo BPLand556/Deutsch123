@@ -27,6 +27,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showError, setShowError] = useState(false);
+  const [permissionState, setPermissionState] = useState<'idle' | 'requesting' | 'denied' | 'granted'>('idle');
 
   const {
     isListening,
@@ -48,33 +49,80 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
       setShowError(true);
       onError?.(error);
       setTimeout(() => setShowError(false), 5000);
+      if (error.toLowerCase().includes('denied')) {
+        setPermissionState('denied');
+      }
     },
   });
 
+  // Check for permission on mount
+  React.useEffect(() => {
+    if (!navigator.permissions) return;
+    navigator.permissions.query({ name: 'microphone' as PermissionName }).then((result) => {
+      if (result.state === 'granted') setPermissionState('granted');
+      else if (result.state === 'denied') setPermissionState('denied');
+      else setPermissionState('idle');
+      result.onchange = () => {
+        if (result.state === 'granted') setPermissionState('granted');
+        else if (result.state === 'denied') setPermissionState('denied');
+        else setPermissionState('idle');
+      };
+    }).catch(() => {
+      // Permissions API not supported
+      setPermissionState('idle');
+    });
+  }, []);
+
   const handleStartListening = useCallback(() => {
     if (disabled || !isSupported) return;
-    
-    if (autoStop) {
-      startListeningWithTimeout(timeoutMs);
-    } else {
-      startListening();
+    setPermissionState('requesting');
+    // Try to start listening, which will trigger browser permission prompt if needed
+    try {
+      if (autoStop) {
+        startListeningWithTimeout(timeoutMs);
+      } else {
+        startListening();
+      }
+      setPermissionState('granted');
+      console.log('Microphone: listening started');
+    } catch (err) {
+      setPermissionState('denied');
+      setShowError(true);
+      onError?.('Microphone access denied or unavailable.');
+      setTimeout(() => setShowError(false), 5000);
+      console.error('Microphone error:', err);
     }
-  }, [disabled, isSupported, autoStop, timeoutMs, startListening, startListeningWithTimeout]);
+  }, [disabled, isSupported, autoStop, timeoutMs, startListening, startListeningWithTimeout, onError]);
 
   const handleStopListening = useCallback(() => {
     stopListening();
+    setPermissionState('idle');
+    console.log('Microphone: listening stopped');
   }, [stopListening]);
 
   const handleReset = useCallback(() => {
     reset();
     setShowError(false);
+    setPermissionState('idle');
   }, [reset]);
 
   if (!isSupported) {
     return (
       <div className={`p-4 bg-red-50 border border-red-200 rounded-lg ${className}`}>
         <p className="text-red-600 text-sm">
-          Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.
+          Speech recognition is not supported in your browser. Please use Chrome, Edge, or Safari.<br/>
+          <span className="font-medium">Tip:</span> If you are on a supported browser and still see this, check your browser settings to enable microphone access.
+        </p>
+      </div>
+    );
+  }
+
+  if (permissionState === 'denied') {
+    return (
+      <div className={`p-4 bg-red-50 border border-red-200 rounded-lg ${className}`}>
+        <p className="text-red-600 text-sm">
+          Microphone access was denied. Please enable microphone permissions in your browser settings and reload the page.<br/>
+          <span className="font-medium">Troubleshooting:</span> Check your browser's privacy settings or click the lock icon in the address bar.
         </p>
       </div>
     );
@@ -154,7 +202,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
 
         {/* Button Text */}
         <span>
-          {isListening ? 'Listening...' : placeholder}
+          {permissionState === 'requesting' ? 'Waiting for permission...' : isListening ? 'Listening...' : placeholder}
         </span>
 
         {/* Confidence indicator */}
