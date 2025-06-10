@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ImmersionScenario, ScenarioType } from '@/types'
 import ImmersionExperience from '@/components/features/ImmersionExperience'
@@ -42,9 +42,42 @@ const sampleScenarios: ImmersionScenario[] = [
         completed: false
       }
     ],
-    vocabulary: [],
+    vocabulary: [
+      {
+        id: '1',
+        word: 'Kaffee',
+        translation: 'coffee',
+        pronunciation: 'KAH-fee',
+        partOfSpeech: 'noun',
+        difficulty: 'A1',
+        context: 'restaurant',
+        examples: ['Ich möchte einen Kaffee, bitte.'],
+        synonyms: ['Bohne'],
+        antonyms: [],
+        relatedWords: ['Tee', 'Milch', 'Zucker'],
+        culturalNotes: 'Coffee culture is very important in Germany',
+        audioUrl: '/audio/kaffee.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
     grammar: [],
-    culturalNotes: [],
+    culturalNotes: [
+      {
+        id: '1',
+        title: 'Berlin Coffee Culture',
+        description: 'Berlin has a vibrant coffee scene with many independent cafés',
+        category: 'customs',
+        relevance: 'restaurant',
+        examples: ['Many cafés have creative, international atmospheres']
+      }
+    ],
     media: []
   },
   {
@@ -83,9 +116,42 @@ const sampleScenarios: ImmersionScenario[] = [
         completed: false
       }
     ],
-    vocabulary: [],
+    vocabulary: [
+      {
+        id: '2',
+        word: 'Fahrkarte',
+        translation: 'ticket',
+        pronunciation: 'FAHR-kar-te',
+        partOfSpeech: 'noun',
+        difficulty: 'A2',
+        context: 'transportation',
+        examples: ['Ich brauche eine Fahrkarte nach Berlin.'],
+        synonyms: ['Ticket'],
+        antonyms: [],
+        relatedWords: ['Zug', 'Bahnhof', 'Gleis'],
+        culturalNotes: 'German trains are known for punctuality',
+        audioUrl: '/audio/fahrkarte.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
     grammar: [],
-    culturalNotes: [],
+    culturalNotes: [
+      {
+        id: '2',
+        title: 'German Punctuality',
+        description: 'Germans value punctuality, especially in transportation',
+        category: 'customs',
+        relevance: 'transportation',
+        examples: ['Trains typically run on time']
+      }
+    ],
     media: []
   },
   {
@@ -124,9 +190,412 @@ const sampleScenarios: ImmersionScenario[] = [
         completed: false
       }
     ],
-    vocabulary: [],
+    vocabulary: [
+      {
+        id: '3',
+        word: 'Vorlesung',
+        translation: 'lecture',
+        pronunciation: 'FOR-lay-zung',
+        partOfSpeech: 'noun',
+        difficulty: 'B1',
+        context: 'university',
+        examples: ['Die Vorlesung beginnt um 10 Uhr.'],
+        synonyms: ['Unterricht'],
+        antonyms: [],
+        relatedWords: ['Professor', 'Student', 'Universität'],
+        culturalNotes: 'Austrian universities have a long academic tradition',
+        audioUrl: '/audio/vorlesung.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
     grammar: [],
-    culturalNotes: [],
+    culturalNotes: [
+      {
+        id: '3',
+        title: 'Austrian Academic Culture',
+        description: 'Austrian universities emphasize formal academic discourse',
+        category: 'customs',
+        relevance: 'university',
+        examples: ['Students address professors formally']
+      }
+    ],
+    media: []
+  },
+  {
+    id: '4',
+    title: 'Frankfurt Business Meeting',
+    description: 'Participate in a formal business meeting in Germany\'s financial capital.',
+    type: 'workplace',
+    difficulty: 'B2',
+    duration: 30,
+    location: 'Frankfurt, Germany',
+    characters: [
+      {
+        id: '4',
+        name: 'Frau Weber',
+        role: 'Business Manager',
+        personality: 'Professional and direct',
+        dialect: 'Hessian',
+        avatar: '/images/characters/weber.jpg',
+        background: 'Frau Weber manages international business relations and values efficiency.',
+        dialogueOptions: []
+      }
+    ],
+    objectives: [
+      {
+        id: '7',
+        title: 'Business vocabulary',
+        description: 'Learn professional German business terminology',
+        type: 'vocabulary',
+        completed: false
+      },
+      {
+        id: '8',
+        title: 'Formal negotiations',
+        description: 'Practice formal business communication and negotiations',
+        type: 'communication',
+        completed: false
+      }
+    ],
+    vocabulary: [
+      {
+        id: '4',
+        word: 'Geschäftsmodell',
+        translation: 'business model',
+        pronunciation: 'ge-SHEFTS-mo-del',
+        partOfSpeech: 'noun',
+        difficulty: 'B2',
+        context: 'workplace',
+        examples: ['Unser Geschäftsmodell ist sehr erfolgreich.'],
+        synonyms: ['Unternehmensmodell'],
+        antonyms: [],
+        relatedWords: ['Geschäft', 'Strategie', 'Planung'],
+        culturalNotes: 'German business culture values thorough planning',
+        audioUrl: '/audio/geschaeftsmodell.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
+    grammar: [],
+    culturalNotes: [
+      {
+        id: '4',
+        title: 'German Business Etiquette',
+        description: 'German business culture emphasizes punctuality and direct communication',
+        category: 'customs',
+        relevance: 'workplace',
+        examples: ['Meetings start exactly on time']
+      }
+    ],
+    media: []
+  },
+  {
+    id: '5',
+    title: 'Hamburg Supermarket',
+    description: 'Navigate a German supermarket and understand product labels and prices.',
+    type: 'shopping',
+    difficulty: 'A1',
+    duration: 18,
+    location: 'Hamburg, Germany',
+    characters: [
+      {
+        id: '5',
+        name: 'Klaus',
+        role: 'Store Clerk',
+        personality: 'Helpful and knowledgeable',
+        dialect: 'Hamburg',
+        avatar: '/images/characters/klaus.jpg',
+        background: 'Klaus knows all the products and loves helping customers find what they need.',
+        dialogueOptions: []
+      }
+    ],
+    objectives: [
+      {
+        id: '9',
+        title: 'Shopping vocabulary',
+        description: 'Learn supermarket and shopping-related words',
+        type: 'vocabulary',
+        completed: false
+      },
+      {
+        id: '10',
+        title: 'Read labels',
+        description: 'Practice reading German product labels and prices',
+        type: 'vocabulary',
+        completed: false
+      }
+    ],
+    vocabulary: [
+      {
+        id: '5',
+        word: 'Supermarkt',
+        translation: 'supermarket',
+        pronunciation: 'SOO-per-markt',
+        partOfSpeech: 'noun',
+        difficulty: 'A1',
+        context: 'shopping',
+        examples: ['Ich gehe zum Supermarkt einkaufen.'],
+        synonyms: ['Geschäft', 'Laden'],
+        antonyms: [],
+        relatedWords: ['Einkaufswagen', 'Kasse', 'Produkt'],
+        culturalNotes: 'German supermarkets have strict labeling requirements',
+        audioUrl: '/audio/supermarkt.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
+    grammar: [],
+    culturalNotes: [
+      {
+        id: '5',
+        title: 'German Shopping Culture',
+        description: 'Germans value quality and often prefer local products',
+        category: 'customs',
+        relevance: 'shopping',
+        examples: ['Many products are labeled with origin information']
+      }
+    ],
+    media: []
+  },
+  {
+    id: '6',
+    title: 'Cologne Christmas Market',
+    description: 'Experience the magic of a traditional German Christmas market.',
+    type: 'cultural_event',
+    difficulty: 'A2',
+    duration: 22,
+    location: 'Cologne, Germany',
+    characters: [
+      {
+        id: '6',
+        name: 'Maria',
+        role: 'Market Vendor',
+        personality: 'Festive and warm',
+        dialect: 'Cologne',
+        avatar: '/images/characters/maria.jpg',
+        background: 'Maria has been selling traditional Christmas decorations for 15 years.',
+        dialogueOptions: []
+      }
+    ],
+    objectives: [
+      {
+        id: '11',
+        title: 'Holiday vocabulary',
+        description: 'Learn Christmas and holiday-related German words',
+        type: 'vocabulary',
+        completed: false
+      },
+      {
+        id: '12',
+        title: 'Cultural traditions',
+        description: 'Understand German Christmas market traditions',
+        type: 'cultural',
+        completed: false
+      }
+    ],
+    vocabulary: [
+      {
+        id: '6',
+        word: 'Weihnachtsmarkt',
+        translation: 'Christmas market',
+        pronunciation: 'VY-nakhts-markt',
+        partOfSpeech: 'noun',
+        difficulty: 'A2',
+        context: 'cultural_event',
+        examples: ['Der Weihnachtsmarkt ist sehr schön.'],
+        synonyms: ['Christkindlmarkt'],
+        antonyms: [],
+        relatedWords: ['Weihnachten', 'Markt', 'Glühwein'],
+        culturalNotes: 'Christmas markets are a beloved German tradition',
+        audioUrl: '/audio/weihnachtsmarkt.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
+    grammar: [],
+    culturalNotes: [
+      {
+        id: '6',
+        title: 'German Christmas Traditions',
+        description: 'Christmas markets are central to German holiday culture',
+        category: 'traditions',
+        relevance: 'cultural_event',
+        examples: ['Markets feature traditional crafts and food']
+      }
+    ],
+    media: []
+  },
+  {
+    id: '7',
+    title: 'Berlin Art Gallery',
+    description: 'Explore contemporary art and discuss creativity in German.',
+    type: 'city_exploration',
+    difficulty: 'B1',
+    duration: 28,
+    location: 'Berlin, Germany',
+    characters: [
+      {
+        id: '7',
+        name: 'Lisa',
+        role: 'Art Curator',
+        personality: 'Creative and passionate',
+        dialect: 'Berlin',
+        avatar: '/images/characters/lisa.jpg',
+        background: 'Lisa curates contemporary art exhibitions and loves discussing art with visitors.',
+        dialogueOptions: []
+      }
+    ],
+    objectives: [
+      {
+        id: '13',
+        title: 'Art vocabulary',
+        description: 'Learn art and creativity-related German terms',
+        type: 'vocabulary',
+        completed: false
+      },
+      {
+        id: '14',
+        title: 'Express opinions',
+        description: 'Practice expressing opinions about art in German',
+        type: 'communication',
+        completed: false
+      }
+    ],
+    vocabulary: [
+      {
+        id: '7',
+        word: 'Kunstgalerie',
+        translation: 'art gallery',
+        pronunciation: 'KOONST-ga-le-ree',
+        partOfSpeech: 'noun',
+        difficulty: 'B1',
+        context: 'city_exploration',
+        examples: ['Die Kunstgalerie zeigt moderne Kunst.'],
+        synonyms: ['Galerie', 'Museum'],
+        antonyms: [],
+        relatedWords: ['Kunst', 'Ausstellung', 'Künstler'],
+        culturalNotes: 'Berlin is known for its vibrant contemporary art scene',
+        audioUrl: '/audio/kunstgalerie.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
+    grammar: [],
+    culturalNotes: [
+      {
+        id: '7',
+        title: 'Berlin Art Scene',
+        description: 'Berlin is a major center for contemporary art in Europe',
+        category: 'arts',
+        relevance: 'city_exploration',
+        examples: ['Many artists choose Berlin for its creative atmosphere']
+      }
+    ],
+    media: []
+  },
+  {
+    id: '8',
+    title: 'Munich Beer Garden',
+    description: 'Experience traditional Bavarian culture at a beer garden.',
+    type: 'social_gathering',
+    difficulty: 'A2',
+    duration: 24,
+    location: 'Munich, Germany',
+    characters: [
+      {
+        id: '8',
+        name: 'Hans',
+        role: 'Beer Garden Host',
+        personality: 'Traditional and welcoming',
+        dialect: 'Bavarian',
+        avatar: '/images/characters/hans.jpg',
+        background: 'Hans has been working at this beer garden for 20 years and knows all the traditions.',
+        dialogueOptions: []
+      }
+    ],
+    objectives: [
+      {
+        id: '15',
+        title: 'Social vocabulary',
+        description: 'Learn social and hospitality-related German words',
+        type: 'vocabulary',
+        completed: false
+      },
+      {
+        id: '16',
+        title: 'Cultural customs',
+        description: 'Understand Bavarian beer garden traditions',
+        type: 'cultural',
+        completed: false
+      }
+    ],
+    vocabulary: [
+      {
+        id: '8',
+        word: 'Biergarten',
+        translation: 'beer garden',
+        pronunciation: 'BEER-gar-ten',
+        partOfSpeech: 'noun',
+        difficulty: 'A2',
+        context: 'social_gathering',
+        examples: ['Wir gehen zum Biergarten.'],
+        synonyms: ['Gartenwirtschaft'],
+        antonyms: [],
+        relatedWords: ['Bier', 'Garten', 'Gesellschaft'],
+        culturalNotes: 'Beer gardens are central to Bavarian social life',
+        audioUrl: '/audio/biergarten.mp3',
+        srsData: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReview: new Date(),
+          lastReview: new Date(),
+          streak: 0
+        }
+      }
+    ],
+    grammar: [],
+    culturalNotes: [
+      {
+        id: '8',
+        title: 'Bavarian Beer Culture',
+        description: 'Beer gardens are important social spaces in Bavaria',
+        category: 'customs',
+        relevance: 'social_gathering',
+        examples: ['Families often bring their own food']
+      }
+    ],
     media: []
   }
 ]
@@ -135,6 +604,17 @@ export default function ImmersionPage() {
   const [selectedScenario, setSelectedScenario] = useState<ImmersionScenario | null>(null)
   const [isInExperience, setIsInExperience] = useState(false)
   const [filter, setFilter] = useState<ScenarioType | 'all'>('all')
+  const [loadingScenario, setLoadingScenario] = useState<ImmersionScenario | null>(null)
+
+  useEffect(() => {
+    if (loadingScenario) {
+      const timer = setTimeout(() => {
+        setSelectedScenario(loadingScenario)
+        setLoadingScenario(null)
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [loadingScenario])
 
   const filteredScenarios = filter === 'all' 
     ? sampleScenarios 
@@ -334,7 +814,7 @@ export default function ImmersionPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
-              onClick={() => setSelectedScenario(scenario)}
+              onClick={() => setLoadingScenario(scenario)}
             >
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-4">
@@ -357,6 +837,46 @@ export default function ImmersionPage() {
             </motion.div>
           ))}
         </div>
+        {/* Loading Overlay */}
+        {loadingScenario && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl shadow-2xl p-8 max-w-lg w-full text-center"
+            >
+              <h2 className="text-2xl font-bold mb-4">{loadingScenario.title}</h2>
+              <p className="text-gray-700 mb-4">{loadingScenario.description}</p>
+              <div className="mb-4">
+                <h3 className="font-semibold text-gray-900 mb-2">Learning Objectives</h3>
+                <ul className="text-left space-y-1 mb-2">
+                  {loadingScenario.objectives.map((obj) => (
+                    <li key={obj.id} className="text-sm text-gray-700 flex items-center"><span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>{obj.title}</li>
+                  ))}
+                </ul>
+                <h3 className="font-semibold text-gray-900 mb-2">Vocabulary Preview</h3>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {(loadingScenario.vocabulary && loadingScenario.vocabulary.length > 0) ? loadingScenario.vocabulary.slice(0, 5).map((vocab) => (
+                    <span key={vocab.id} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">{vocab.word}</span>
+                  )) : <span className="text-xs text-gray-500">No vocabulary preview</span>}
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">Cultural Tips</h3>
+                <ul className="text-left space-y-1">
+                  {(loadingScenario.culturalNotes && loadingScenario.culturalNotes.length > 0) ? loadingScenario.culturalNotes.slice(0, 3).map((note, i) => (
+                    <li key={note.id} className="text-xs text-gray-600 flex items-center"><span className="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>{note.title || note.description}</li>
+                  )) : <li className="text-xs text-gray-500">No cultural tips</li>}
+                </ul>
+              </div>
+              <div className="text-blue-600 font-medium animate-pulse">Loading immersive environment...</div>
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </div>
   )
