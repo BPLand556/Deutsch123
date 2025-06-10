@@ -141,6 +141,24 @@ export default function Dashboard() {
               />
             </motion.div>
 
+            {/* Streak Counter */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+            >
+              <StreakCounter days={7} />
+            </motion.div>
+
+            {/* Daily Goal */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.37 }}
+            >
+              <DailyGoal completed={3} target={5} />
+            </motion.div>
+
             {/* Vocabulary Review */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
