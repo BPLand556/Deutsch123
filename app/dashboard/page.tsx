@@ -10,10 +10,21 @@ import { DailyGoal } from '@/components/performance/DailyGoal';
 import { StreakCounter } from '@/components/performance/StreakCounter';
 import { MainNavigation } from '@/components/navigation/MainNavigation';
 
+interface Lesson {
+  id: number;
+  title: string;
+  description: string;
+  progress: number;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  duration: string;
+  completed: boolean;
+  category: string;
+}
+
 export default function Dashboard() {
   const [currentMode, setCurrentMode] = useState<'voice' | 'text'>('voice');
 
-  const recentLessons = [
+  const recentLessons: Lesson[] = [
     {
       id: 1,
       title: 'Basic Greetings',
@@ -46,7 +57,7 @@ export default function Dashboard() {
     }
   ];
 
-  const upcomingLessons = [
+  const upcomingLessons: Lesson[] = [
     {
       id: 4,
       title: 'Shopping Conversations',
