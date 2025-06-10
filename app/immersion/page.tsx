@@ -614,6 +614,7 @@ export default function ImmersionPage() {
       }, 2000)
       return () => clearTimeout(timer)
     }
+    return undefined
   }, [loadingScenario])
 
   const filteredScenarios = filter === 'all' 
@@ -868,7 +869,7 @@ export default function ImmersionPage() {
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Cultural Tips</h3>
                 <ul className="text-left space-y-1">
-                  {(loadingScenario.culturalNotes && loadingScenario.culturalNotes.length > 0) ? loadingScenario.culturalNotes.slice(0, 3).map((note, i) => (
+                  {(loadingScenario.culturalNotes && loadingScenario.culturalNotes.length > 0) ? loadingScenario.culturalNotes.slice(0, 3).map((note) => (
                     <li key={note.id} className="text-xs text-gray-600 flex items-center"><span className="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>{note.title || note.description}</li>
                   )) : <li className="text-xs text-gray-500">No cultural tips</li>}
                 </ul>

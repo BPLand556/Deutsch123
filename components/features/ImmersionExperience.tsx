@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ImmersionScenario, Character, ConversationMessage } from '@/types'
 import Image from 'next/image'
+import { VoiceConversation } from '@/components/voice/VoiceConversation'
+import { CharacterVoice, CHARACTER_VOICES } from '@/components/voice/CharacterVoice'
+import { PronunciationAssessment } from '@/components/voice/PronunciationAssessment'
+import { VoiceModeSelector } from '@/components/voice/VoiceModeSelector'
 
 interface ImmersionExperienceProps {
   scenario: ImmersionScenario
@@ -19,7 +23,11 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
   const [currentCharacter, setCurrentCharacter] = useState<Character | null>(null)
   const [showIntro, setShowIntro] = useState(scenario.title.includes('Coffee Shop'))
   const [interactiveElements, setInteractiveElements] = useState<string[]>([])
-  const [annaEmotion, setAnnaEmotion] = useState<'happy' | 'surprised' | 'confused' | 'thoughtful' | 'excited' | 'neutral' | 'concerned'>('neutral')
+  
+  // Voice conversation state
+  const [conversationMode, setConversationMode] = useState<'voice' | 'text'>('voice')
+  const [characterResponse, setCharacterResponse] = useState<string>('')
+  const [voiceEnabled, setVoiceEnabled] = useState(true)
 
   // Scenario-specific background and audio
   const isBerlinCoffeeShop = scenario.title.toLowerCase().includes('coffee shop')
@@ -198,11 +206,22 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
         'Die Tradition geht auf das 19. Jahrhundert zurück.'
       ],
       cultural: [
-        'Bayerische Gastfreundschaft ist legendär.',
-        'Gemütlichkeit ist uns wichtig.',
-        'Hier fühlt sich jeder willkommen.'
+        'Bayerische Gastfreundschaft ist weltberühmt.',
+        'Bier ist Teil unserer Kultur und Tradition.',
+        'Hier können Sie die echte bayerische Lebensart erleben.'
       ]
     }
+  }
+
+  // Get current character voice configuration
+  const getCurrentCharacterVoice = () => {
+    if (isBerlinCoffeeShop) return CHARACTER_VOICES.anna_barista
+    if (isFrankfurtBusiness) return CHARACTER_VOICES.thomas_business
+    if (isHamburgSupermarket) return CHARACTER_VOICES.lisa_supermarket
+    if (isCologneChristmas) return CHARACTER_VOICES.klaus_christmas
+    if (isBerlinArtGallery) return CHARACTER_VOICES.sophia_art
+    if (isMunichBeerGarden) return CHARACTER_VOICES.hans_beer
+    return CHARACTER_VOICES.anna_barista // Default
   }
 
   const getCurrentElements = () => {
@@ -212,7 +231,7 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
     if (isCologneChristmas) return scenarioElements.christmasMarket
     if (isBerlinArtGallery) return scenarioElements.artGallery
     if (isMunichBeerGarden) return scenarioElements.beerGarden
-    return []
+    return scenarioElements.coffeeShop
   }
 
   const getCurrentResponses = () => {
@@ -222,68 +241,83 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
     if (isCologneChristmas) return characterResponses.maria
     if (isBerlinArtGallery) return characterResponses.lisa
     if (isMunichBeerGarden) return characterResponses.hans
-    return characterResponses.anna // fallback
+    return characterResponses.anna
   }
 
-  const coffeeShopElements = getCurrentElements()
-  const annaResponses = getCurrentResponses()
-
   const handleElementClick = (element: any) => {
-    if (!interactiveElements.includes(element.id)) {
-      setInteractiveElements(prev => [...prev, element.id])
-      
-      // Add vocabulary learning message
-      const vocabMessage: ConversationMessage = {
-        id: Date.now().toString(),
-        sender: 'ai',
-        content: `Ah, Sie schauen sich die ${element.name} an! Hier sind einige nützliche Wörter: ${element.vocabulary.join(', ')}`,
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, vocabMessage])
-      
-      // Change Anna's emotion
-      setAnnaEmotion('excited')
-      setTimeout(() => setAnnaEmotion('neutral'), 2000)
+    setInteractiveElements(prev => [...prev, element.id])
+    
+    // Add vocabulary learning message
+    const vocabularyMessage: ConversationMessage = {
+      id: Date.now().toString(),
+      sender: 'ai',
+      content: `You discovered: ${element.name} (${element.translation})`,
+      timestamp: new Date()
     }
+    
+    setMessages(prev => [...prev, vocabularyMessage])
+    
+    // Generate character response about the element
+    const responses = getCurrentResponses()
+    const response = responses.greeting?.[0] || 'Das ist interessant!'
+    setCharacterResponse(response)
   }
 
   const generateAnnaResponse = (userMessage: string): string => {
-    const lowerMessage = userMessage.toLowerCase()
     const responses = getCurrentResponses()
+    const message = userMessage.toLowerCase()
     
-    if (lowerMessage.includes('hallo') || lowerMessage.includes('guten')) {
-      return responses.greeting[Math.floor(Math.random() * responses.greeting.length)]
-    }
-    if (lowerMessage.includes('menu') || lowerMessage.includes('karte') || lowerMessage.includes('was')) {
-      return (responses as any).menu ? (responses as any).menu[Math.floor(Math.random() * (responses as any).menu.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('kaffee') || lowerMessage.includes('bestellen') || lowerMessage.includes('möchte')) {
-      return (responses as any).order ? (responses as any).order[Math.floor(Math.random() * (responses as any).order.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('berlin') || lowerMessage.includes('kultur') || lowerMessage.includes('warum')) {
-      return responses.cultural ? responses.cultural[Math.floor(Math.random() * responses.cultural.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('business') || lowerMessage.includes('geschäft') || lowerMessage.includes('meeting')) {
-      return (responses as any).business ? (responses as any).business[Math.floor(Math.random() * (responses as any).business.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('produkt') || lowerMessage.includes('einkaufen') || lowerMessage.includes('supermarkt')) {
-      return (responses as any).products ? (responses as any).products[Math.floor(Math.random() * (responses as any).products.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('weihnachten') || lowerMessage.includes('markt') || lowerMessage.includes('handwerk')) {
-      return (responses as any).crafts ? (responses as any).crafts[Math.floor(Math.random() * (responses as any).crafts.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('kunst') || lowerMessage.includes('galerie') || lowerMessage.includes('ausstellung')) {
-      return (responses as any).art ? (responses as any).art[Math.floor(Math.random() * (responses as any).art.length)] : responses.greeting[0]
-    }
-    if (lowerMessage.includes('bier') || lowerMessage.includes('garten') || lowerMessage.includes('bayerisch')) {
-      return (responses as any).beer ? (responses as any).beer[Math.floor(Math.random() * (responses as any).beer.length)] : responses.greeting[0]
+    // Check for specific keywords and generate appropriate responses
+    if (message.includes('hallo') || message.includes('guten')) {
+      return responses.greeting?.[Math.floor(Math.random() * responses.greeting.length)] || 'Hallo!'
     }
     
-    return 'Das ist interessant! Können Sie das noch einmal sagen?'
+    if (message.includes('kaffee') || message.includes('menu') || message.includes('speisekarte')) {
+      // Handle different response types based on scenario
+      if ('menu' in responses) {
+        return (responses as any).menu?.[Math.floor(Math.random() * (responses as any).menu.length)] || 'Hier ist unsere Speisekarte.'
+      }
+      return responses.greeting?.[0] || 'Hier ist unsere Speisekarte.'
+    }
+    
+    if (message.includes('bestellen') || message.includes('order') || message.includes('nehmen')) {
+      // Handle different response types based on scenario
+      if ('order' in responses) {
+        return (responses as any).order?.[Math.floor(Math.random() * (responses as any).order.length)] || 'Was möchten Sie bestellen?'
+      }
+      return responses.greeting?.[0] || 'Was möchten Sie bestellen?'
+    }
+    
+    if (message.includes('berlin') || message.includes('kultur') || message.includes('tradition')) {
+      return responses.cultural?.[Math.floor(Math.random() * responses.cultural.length)] || 'Das ist sehr interessant!'
+    }
+    
+    // Default response
+    return responses.greeting?.[0] || 'Das ist interessant! Erzählen Sie mir mehr.'
+  }
+
+  // Handle voice input from VoiceConversation component
+  const handleVoiceInput = async (transcript: string, confidence: number) => {
+    // Add user message to conversation
+    const userMessage: ConversationMessage = {
+      id: Date.now().toString(),
+      sender: 'user',
+      content: transcript,
+      timestamp: new Date()
+    }
+    
+    setMessages(prev => [...prev, userMessage])
+    
+    // Generate character response
+    const response = generateAnnaResponse(transcript)
+    setCharacterResponse(response)
+    
+    // Log confidence for debugging
+    console.log(`Voice input confidence: ${Math.round(confidence * 100)}%`)
   }
 
   const handleSendMessage = async () => {
-    if (!userInput.trim() || isTyping) return
+    if (!userInput.trim()) return
 
     const userMessage: ConversationMessage = {
       id: Date.now().toString(),
@@ -296,26 +330,19 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
     setUserInput('')
     setIsTyping(true)
 
-    // Generate Anna's response
+    // Generate character response
+    const response = generateAnnaResponse(userInput)
+    setCharacterResponse(response)
+
     setTimeout(() => {
-      const aiResponse = generateAnnaResponse(userInput)
-      const aiMessage: ConversationMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: 'ai',
-        content: aiResponse,
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, aiMessage])
       setIsTyping(false)
-      
-      // Change Anna's emotion based on response
-      setAnnaEmotion('happy')
-      setTimeout(() => setAnnaEmotion('neutral'), 1500)
-    }, 1500)
+    }, 1000)
   }
 
   const getProgressPercentage = () => {
-    return (completedObjectives.length / scenario.objectives.length) * 100
+    const totalObjectives = scenario.objectives.length
+    const completed = completedObjectives.length
+    return totalObjectives > 0 ? (completed / totalObjectives) * 100 : 0
   }
 
   useEffect(() => {
@@ -547,30 +574,73 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                 </AnimatePresence>
               </div>
 
-              {/* Input */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Type your message in German..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={isTyping}
+              {/* Voice Conversation Interface */}
+              <div className="space-y-4">
+                {/* Voice Conversation Component */}
+                <VoiceConversation
+                  onUserInput={handleVoiceInput}
+                  characterResponse={characterResponse}
+                  characterName={currentCharacter?.name || 'Character'}
+                  placeholder="Click to speak in German..."
+                  language="de-DE"
+                  autoStop={true}
+                  timeoutMs={5000}
+                  disabled={isTyping || !voiceEnabled}
+                  showWaveform={conversationMode === 'voice'}
+                  showConfidence={conversationMode === 'voice'}
+                  showTranscript={true}
+                  onError={(error) => console.error('Voice error:', error)}
                 />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!userInput.trim() || isTyping}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Send
-                </button>
+
+                {/* Text Input for Text Mode */}
+                {conversationMode === 'text' && (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={userInput}
+                      onChange={(e) => setUserInput(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder="Type your message in German..."
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={isTyping}
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!userInput.trim() || isTyping}
+                      className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Send
+                    </button>
+                  </div>
+                )}
+
+                {/* Pronunciation Assessment */}
+                {messages.length > 0 && messages[messages.length - 1]?.sender === 'user' && (
+                  <PronunciationAssessment
+                    userInput={messages[messages.length - 1]?.content || ''}
+                    showDetailed={false}
+                    className="mt-4"
+                  />
+                )}
               </div>
             </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Character Voice Card */}
+            {(isBerlinCoffeeShop || isFrankfurtBusiness || isHamburgSupermarket || isCologneChristmas || isBerlinArtGallery || isMunichBeerGarden) && (
+              <div className="bg-white rounded-lg shadow-lg p-6">
+                <h3 className="text-lg font-semibold mb-4">Character Voice</h3>
+                <CharacterVoice
+                  character={getCurrentCharacterVoice()}
+                  text={characterResponse || 'Hallo! Wie kann ich Ihnen helfen?'}
+                  autoPlay={false}
+                  className="mb-4"
+                />
+              </div>
+            )}
+
             {/* Character Card */}
             {(isBerlinCoffeeShop || isFrankfurtBusiness || isHamburgSupermarket || isCologneChristmas || isBerlinArtGallery || isMunichBeerGarden) && (
               <div className="bg-white rounded-lg shadow-lg p-6">
@@ -585,15 +655,9 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                 </h3>
                 <div className="text-center">
                   <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center text-3xl mb-3 ${
-                    annaEmotion === 'happy' ? 'bg-yellow-100' :
-                    annaEmotion === 'excited' ? 'bg-orange-100' :
-                    annaEmotion === 'surprised' ? 'bg-blue-100' :
                     'bg-gray-100'
                   }`}>
-                    {annaEmotion === 'happy' ? '😊' :
-                     annaEmotion === 'excited' ? '🤩' :
-                     annaEmotion === 'surprised' ? '😲' :
-                     '😐'}
+                    {''}
                   </div>
                   <h4 className="font-medium text-gray-900">
                     {isBerlinCoffeeShop ? 'Anna' :
@@ -625,6 +689,41 @@ export default function ImmersionExperience({ scenario, onComplete, onExit }: Im
                 </div>
               </div>
             )}
+
+            {/* Voice Settings */}
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">Voice Settings</h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700">Voice Mode</span>
+                  <button
+                    onClick={() => setVoiceEnabled(!voiceEnabled)}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                      voiceEnabled 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    {voiceEnabled ? 'Enabled' : 'Disabled'}
+                  </button>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700">Pronunciation Feedback</span>
+                  <span className="text-xs text-blue-600">Active</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-700">Character Voice</span>
+                  <span className="text-xs text-blue-600">Berlin Dialect</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Voice Mode Selector */}
+            <VoiceModeSelector
+              currentMode={conversationMode}
+              onModeChange={setConversationMode}
+              className="mb-6"
+            />
 
             {/* Objectives */}
             <div className="bg-white rounded-lg shadow-lg p-6">
