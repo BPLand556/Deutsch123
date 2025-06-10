@@ -6,9 +6,9 @@ import { VoiceModeSelector } from '@/components/voice/VoiceModeSelector';
 import { ProgressOverview } from '@/components/performance/ProgressOverview';
 import { LessonCard } from '@/components/features/LessonCard';
 import { VocabularyReview } from '@/components/features/VocabularyReview';
-import { DailyGoal } from '@/components/performance/DailyGoal';
 import { StreakCounter } from '@/components/performance/StreakCounter';
 import { MainNavigation } from '@/components/navigation/MainNavigation';
+import { DailyGoal } from '@/components/performance/DailyGoal';
 
 interface Lesson {
   id: number;
