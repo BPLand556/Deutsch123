@@ -50,6 +50,7 @@ export const AssessmentQuiz: React.FC<AssessmentQuizProps> = ({
       }, 1000);
       return () => clearInterval(timer);
     }
+    return undefined;
   }, [isStarted, isCompleted]);
 
   const formatTime = (seconds: number) => {
