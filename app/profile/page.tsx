@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ProgressOverview } from '@/components/performance/ProgressOverview';
 import { StreakCounter } from '@/components/performance/StreakCounter';
 import { DailyGoal } from '@/components/performance/DailyGoal';
