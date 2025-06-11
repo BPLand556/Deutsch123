@@ -148,6 +148,9 @@ export const useSpeechRecognition = (options: UseSpeechRecognitionOptions = {}) 
           case 'language-not-supported':
             errorMessage = 'German language not supported in your browser.';
             break;
+          case 'aborted':
+            // Suppress the aborted error
+            return;
           default:
             errorMessage = `Speech recognition error: ${event.error}`;
         }
