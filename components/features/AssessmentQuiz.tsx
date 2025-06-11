@@ -37,7 +37,6 @@ export const AssessmentQuiz: React.FC<AssessmentQuizProps> = ({
   const [userAnswers, setUserAnswers] = useState<Record<number, string | string[]>>({});
   const [showExplanation, setShowExplanation] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
-  const [startTime, setStartTime] = useState<Date | null>(null);
   const [timeSpent, setTimeSpent] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
 
@@ -61,7 +60,6 @@ export const AssessmentQuiz: React.FC<AssessmentQuizProps> = ({
 
   const handleStart = () => {
     setIsStarted(true);
-    setStartTime(new Date());
   };
 
   const handleAnswerSelect = (answer: string) => {
