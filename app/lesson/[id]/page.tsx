@@ -131,12 +131,14 @@ export default function LessonPage() {
           </p>
           <div className="space-y-3">
             <button
+              type="button"
               onClick={() => router.push('/dashboard')}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               Back to Dashboard
             </button>
             <button
+              type="button"
               onClick={() => {
                 setCurrentStep(0);
                 setIsCompleted(false);
@@ -160,6 +162,7 @@ export default function LessonPage() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-4">
               <button
+                type="button"
                 onClick={() => router.push('/dashboard')}
                 className="text-gray-600 hover:text-gray-900"
               >
@@ -258,6 +261,7 @@ export default function LessonPage() {
                       {currentStepData.options.map((option, index) => (
                         <motion.button
                           key={index}
+                          type="button"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => handleAnswerSelect(option)}
@@ -316,6 +320,7 @@ export default function LessonPage() {
               {/* Navigation */}
               <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
                 <button
+                  type="button"
                   onClick={handlePrevious}
                   disabled={currentStep === 0}
                   className={`px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -330,6 +335,7 @@ export default function LessonPage() {
                 <div className="flex items-center space-x-3">
                   {currentStepData.type === 'practice' && (
                     <button
+                      type="button"
                       onClick={() => setShowHint(!showHint)}
                       className="text-sm text-blue-600 hover:text-blue-700 font-medium"
                     >
@@ -338,6 +344,7 @@ export default function LessonPage() {
                   )}
                   
                   <button
+                    type="button"
                     onClick={handleNext}
                     className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                   >
