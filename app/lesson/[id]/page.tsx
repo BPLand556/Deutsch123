@@ -398,8 +398,7 @@ export default function LessonPage() {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Voice Practice</h3>
                 <VoiceInput
-                  onTranscript={(transcript, confidence) => {
-                  }}
+                  onTranscript={() => {}}
                   placeholder="Practice speaking German..."
                   className="mb-4"
                 />
