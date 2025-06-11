@@ -171,18 +171,19 @@ export const useSpeechRecognition = (options: UseSpeechRecognitionOptions = {}) 
   }, [language, continuous, interimResults, maxAlternatives, onResult, onError, onStart, onEnd]);
 
   const startListening = useCallback(() => {
-    if (!recognitionRef.current || !state.isSupported) {
-      setState(prev => ({ ...prev, error: 'Speech recognition not supported' }));
+    console.log('useSpeechRecognition: startListening called');
+    if (!state.isSupported) {
+      console.log('useSpeechRecognition: not supported');
       return;
     }
-
+    
     try {
-      recognitionRef.current.start();
-    } catch (error) {
-      setState(prev => ({ 
-        ...prev, 
-        error: 'Failed to start speech recognition' 
-      }));
+      setState(prev => ({ ...prev, isListening: true, error: null }));
+      recognitionRef.current?.start();
+      console.log('useSpeechRecognition: recognition.start() called');
+    } catch (err) {
+      console.error('useSpeechRecognition: Error starting recognition', err);
+      setState(prev => ({ ...prev, isListening: false, error: 'Failed to start speech recognition' }));
     }
   }, [state.isSupported]);
 

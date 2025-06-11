@@ -74,7 +74,11 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
   }, []);
 
   const handleStartListening = useCallback(() => {
-    if (disabled || !isSupported) return;
+    console.log('VoiceInput: handleStartListening called');
+    if (disabled || !isSupported) {
+      console.log('VoiceInput: disabled or not supported', { disabled, isSupported });
+      return;
+    }
     setPermissionState('requesting');
     // Try to start listening, which will trigger browser permission prompt if needed
     try {
@@ -86,6 +90,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
       setPermissionState('granted');
       console.log('Microphone: listening started');
     } catch (err) {
+      console.error('VoiceInput: Error starting listening', err);
       setPermissionState('denied');
       setShowError(true);
       onError?.('Microphone access denied or unavailable.');
