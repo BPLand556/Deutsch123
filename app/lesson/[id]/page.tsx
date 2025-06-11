@@ -90,7 +90,6 @@ export default function LessonPage() {
   const progress = ((currentStep + 1) / lesson.steps.length) * 100;
 
   const handleNext = () => {
-    console.log('Next button clicked!');
     if (currentStep < lesson.steps.length - 1) {
       setCurrentStep(currentStep + 1);
       setShowHint(false);
@@ -100,7 +99,6 @@ export default function LessonPage() {
   };
 
   const handlePrevious = () => {
-    console.log('Previous button clicked!');
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
       setShowHint(false);
@@ -108,12 +106,10 @@ export default function LessonPage() {
   };
 
   const handleAnswerSelect = (answer: string) => {
-    console.log('Answer selected:', answer);
     setUserAnswers({ ...userAnswers, [currentStepData.id]: answer });
   };
 
   const handleDashboardClick = () => {
-    console.log('Dashboard button clicked!');
     router.push('/dashboard');
   };
 
@@ -177,13 +173,6 @@ export default function LessonPage() {
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-              </button>
-              <button
-                type="button"
-                onClick={() => console.log('Test button clicked!')}
-                className="px-3 py-1 bg-red-500 text-white rounded text-sm"
-              >
-                Test Button
               </button>
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">{lesson.title}</h1>
@@ -410,7 +399,6 @@ export default function LessonPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Voice Practice</h3>
                 <VoiceInput
                   onTranscript={(transcript, confidence) => {
-                    console.log('Practice transcript:', transcript, confidence);
                   }}
                   placeholder="Practice speaking German..."
                   className="mb-4"

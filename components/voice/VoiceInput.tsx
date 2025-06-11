@@ -74,9 +74,7 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
   }, []);
 
   const handleStartListening = useCallback(() => {
-    console.log('VoiceInput: handleStartListening called');
     if (disabled || !isSupported) {
-      console.log('VoiceInput: disabled or not supported', { disabled, isSupported });
       return;
     }
     setPermissionState('requesting');
@@ -88,21 +86,17 @@ export const VoiceInput: React.FC<VoiceInputProps> = ({
         startListening();
       }
       setPermissionState('granted');
-      console.log('Microphone: listening started');
     } catch (err) {
-      console.error('VoiceInput: Error starting listening', err);
       setPermissionState('denied');
       setShowError(true);
       onError?.('Microphone access denied or unavailable.');
       setTimeout(() => setShowError(false), 5000);
-      console.error('Microphone error:', err);
     }
   }, [disabled, isSupported, autoStop, timeoutMs, startListening, startListeningWithTimeout, onError]);
 
   const handleStopListening = useCallback(() => {
     stopListening();
     setPermissionState('idle');
-    console.log('Microphone: listening stopped');
   }, [stopListening]);
 
   const handleReset = useCallback(() => {
