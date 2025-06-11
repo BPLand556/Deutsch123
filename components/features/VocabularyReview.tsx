@@ -16,7 +16,6 @@ interface VocabularyWord {
 
 export const VocabularyReview: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
 
   const vocabularyWords: VocabularyWord[] = [
     {
