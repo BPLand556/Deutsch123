@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { VoiceInput } from '@/components/voice/VoiceInput';
 import { TextToSpeech } from '@/components/voice/TextToSpeech';
 import { TranslationReveal } from '@/components/translation/TranslationReveal';
+import Link from 'next/link';
 
 const features = [
   {
@@ -475,12 +476,12 @@ export default function FeaturesPage() {
               Join thousands of learners and experience the most advanced German learning platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              <Link href="/signup" className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors text-center">
                 Start Free Trial
-              </button>
-              <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors">
+              </Link>
+              <Link href="/pricing" className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors text-center">
                 View Pricing
-              </button>
+              </Link>
             </div>
           </div>
         </motion.div>
