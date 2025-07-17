@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 interface Lesson {
   id: number;
@@ -18,13 +19,17 @@ interface LessonCardProps {
   lesson: Lesson;
   delay?: number;
   className?: string;
+  onAction?: () => void;
 }
 
 export const LessonCard: React.FC<LessonCardProps> = ({ 
   lesson, 
   delay = 0,
-  className = '' 
+  className = '',
+  onAction
 }) => {
+  const router = useRouter();
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Beginner':
@@ -126,6 +131,7 @@ export const LessonCard: React.FC<LessonCardProps> = ({
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={onAction ? onAction : () => router.push(`/lesson/${lesson.id}`)}
           className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors ${
             lesson.completed
               ? 'bg-green-100 text-green-700 hover:bg-green-200'

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 interface VocabularyWord {
   id: number;
@@ -16,6 +17,7 @@ interface VocabularyWord {
 
 export const VocabularyReview: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
+  const router = useRouter();
 
   const vocabularyWords: VocabularyWord[] = [
     {
@@ -165,6 +167,7 @@ export const VocabularyReview: React.FC = () => {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => router.push('/assessment')}
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
           >
             Start Review Session

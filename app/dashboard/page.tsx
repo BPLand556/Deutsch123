@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { VoiceModeSelector } from '@/components/voice/VoiceModeSelector';
 import { ProgressOverview } from '@/components/performance/ProgressOverview';
 import { LessonCard } from '@/components/features/LessonCard';
@@ -9,6 +10,7 @@ import { VocabularyReview } from '@/components/features/VocabularyReview';
 import { StreakCounter } from '@/components/performance/StreakCounter';
 import { MainNavigation } from '@/components/navigation/MainNavigation';
 import { DailyGoal } from '@/components/performance/DailyGoal';
+import { VoiceInput } from '@/components/voice/VoiceInput';
 
 interface Lesson {
   id: number;
@@ -23,6 +25,11 @@ interface Lesson {
 
 export default function Dashboard() {
   const [currentMode, setCurrentMode] = useState<'voice' | 'text'>('voice');
+  const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
+  const [showLessonModal, setShowLessonModal] = useState(false);
+  const [voiceTranscript, setVoiceTranscript] = useState('');
+  const [voiceConfidence, setVoiceConfidence] = useState(0);
+  const [voiceError, setVoiceError] = useState('');
 
   const recentLessons: Lesson[] = [
     {
@@ -84,6 +91,36 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-amber-50">
       <MainNavigation />
 
+      {/* Lesson Modal */}
+      {showLessonModal && activeLesson && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-xl shadow-lg p-8 max-w-md w-full relative">
+            <button
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+              onClick={() => setShowLessonModal(false)}
+            >
+              &times;
+            </button>
+            <h2 className="text-2xl font-bold mb-2">{activeLesson.title}</h2>
+            <p className="mb-2 text-gray-700">{activeLesson.description}</p>
+            <div className="mb-2">
+              <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 mr-2">{activeLesson.difficulty}</span>
+              <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">{activeLesson.duration}</span>
+            </div>
+            <div className="mb-2 text-sm text-gray-600">Category: {activeLesson.category}</div>
+            <div className="mb-2 text-sm text-gray-600">Progress: {activeLesson.progress}%</div>
+            <div className="mt-4">
+              <button
+                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                onClick={() => setShowLessonModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -111,6 +148,10 @@ export default function Dashboard() {
                       key={lesson.id}
                       lesson={lesson}
                       delay={index * 0.1}
+                      onAction={() => {
+                        setActiveLesson(lesson);
+                        setShowLessonModal(true);
+                      }}
                     />
                   ))}
                 </div>
@@ -131,6 +172,10 @@ export default function Dashboard() {
                       key={lesson.id}
                       lesson={lesson}
                       delay={index * 0.1}
+                      onAction={() => {
+                        setActiveLesson(lesson);
+                        setShowLessonModal(true);
+                      }}
                     />
                   ))}
                 </div>
@@ -151,6 +196,36 @@ export default function Dashboard() {
                 onModeChange={setCurrentMode}
               />
             </motion.div>
+
+            {/* Voice Input (only in voice mode) */}
+            {currentMode === 'voice' && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.32 }}
+              >
+                <VoiceInput
+                  onTranscript={(transcript, confidence) => {
+                    setVoiceTranscript(transcript);
+                    setVoiceConfidence(confidence);
+                  }}
+                  onError={setVoiceError}
+                />
+                {voiceTranscript && (
+                  <div className="mt-2 text-sm text-blue-700 bg-blue-50 rounded p-2">
+                    <strong>Transcript:</strong> {voiceTranscript}
+                    {voiceConfidence > 0 && (
+                      <span className="ml-2 text-xs text-gray-500">({Math.round(voiceConfidence * 100)}% confidence)</span>
+                    )}
+                  </div>
+                )}
+                {voiceError && (
+                  <div className="mt-2 text-sm text-red-600 bg-red-50 rounded p-2">
+                    <strong>Error:</strong> {voiceError}
+                  </div>
+                )}
+              </motion.div>
+            )}
 
             {/* Streak Counter */}
             <motion.div
@@ -188,18 +263,30 @@ export default function Dashboard() {
             >
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-3">
-                <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                <Link 
+                  href="/lesson/1"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium block text-center"
+                >
                   Start New Lesson
-                </button>
-                <button className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium">
+                </Link>
+                <Link 
+                  href="/immersion"
+                  className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-medium block text-center"
+                >
                   Practice Speaking
-                </button>
-                <button className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors font-medium">
+                </Link>
+                <Link 
+                  href="/assessment"
+                  className="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors font-medium block text-center"
+                >
                   Review Vocabulary
-                </button>
-                <button className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium">
+                </Link>
+                <Link 
+                  href="/assessment"
+                  className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition-colors font-medium block text-center"
+                >
                   Take Assessment
-                </button>
+                </Link>
               </div>
             </motion.div>
           </div>
